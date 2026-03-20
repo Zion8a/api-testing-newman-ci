@@ -1,0 +1,146 @@
+{
+  "info": {
+    "_postman_id": "00000000-0000-0000-0000-000000000000",
+    "name": "API Smoke",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00 Health",
+      "item": [
+        {
+          "name": "GET /ping",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ping",
+              "host": ["{{baseUrl}}"],
+              "path": ["ping"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 Core GET",
+      "item": [
+        {
+          "name": "GET /booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response is an array with bookingid\", function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.be.an(\"array\");",
+                  "  pm.expect(json.length).to.be.greaterThan(0);",
+                  "  pm.expect(json[0]).to.have.property(\"bookingid\");",
+                  "});",
+                  "",
+                  "// Auto-set bookingId for next request",
+                  "const list = pm.response.json();",
+                  "pm.environment.set(\"bookingId\", list[0].bookingid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/booking",
+              "host": ["{{baseUrl}}"],
+              "path": ["booking"]
+            }
+          }
+        },
+        {
+          "name": "GET /booking/{{bookingId}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Has expected fields\", function () {",
+                  "  const b = pm.response.json();",
+                  "  pm.expect(b).to.have.property(\"firstname\");",
+                  "  pm.expect(b).to.have.property(\"lastname\");",
+                  "  pm.expect(b).to.have.property(\"totalprice\");",
+                  "  pm.expect(b).to.have.property(\"depositpaid\");",
+                  "  pm.expect(b).to.have.property(\"bookingdates\");",
+                  "  pm.expect(b.bookingdates).to.have.property(\"checkin\");",
+                  "  pm.expect(b.bookingdates).to.have.property(\"checkout\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["booking", "{{bookingId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 Negative",
+      "item": [
+        {
+          "name": "GET /booking/99999999 (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 404\", function () {",
+                  "  pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/booking/99999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["booking", "99999999"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

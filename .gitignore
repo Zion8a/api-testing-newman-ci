@@ -1,0 +1,4 @@
+node_modules/
+newman/reports/
+.env
+.DS_Store

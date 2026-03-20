@@ -1,0 +1,14 @@
+{
+  "name": "api-testing-newman-ci",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API smoke tests with Postman collections + Newman CLI, executed in GitHub Actions with HTML/JUnit reports as artifacts.",
+  "scripts": {
+    "api:smoke": "newman run postman/collections/api-smoke.postman_collection.json -e postman/environments/dev.postman_environment.json --reporters cli,htmlextra,junitfull --reporter-htmlextra-export newman/reports/report.html --reporter-junitfull-export newman/reports/junit.xml"
+  },
+  "devDependencies": {
+    "newman": "^6.0.0",
+    "newman-reporter-htmlextra": "^1.23.1",
+    "newman-reporter-junitfull": "^1.1.1"
+  }
+}

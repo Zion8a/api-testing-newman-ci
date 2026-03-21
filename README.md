@@ -1,0 +1,1 @@
+![API Smoke](https://github.com/Zion8a/api-testing-newman-ci/actions/workflows/api-smoke.yml/badge.svg)
